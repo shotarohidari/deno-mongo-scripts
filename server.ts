@@ -1,0 +1,13 @@
+import { Application } from "https://deno.land/x/oak@v11.1.0/mod.ts";
+import { createMongoRouter } from "./routes.ts";
+import { config } from "https://deno.land/x/dotenv@v3.2.2/mod.ts";
+import { MongoClient } from "./MongoClient.ts";
+const { DATA_API_KEY, APP_ID,DATABASE,DATASOURCE } = config();
+const app = new Application();
+const PORT = 3000;
+const client = new MongoClient(DATA_API_KEY,APP_ID,DATABASE,DATASOURCE);
+const router = createMongoRouter(client);
+app.use(router.routes());
+app.use(router.allowedMethods());
+app.listen({ port: PORT });
+console.log(`Server listening on port ${PORT}`);
